@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-syne: var(--font-syne), var(--font-sans), system-ui, sans-serif;
+}
+
+:root {
+  --bg-page: #fbf9f5;
+  --bg-card: #ffffff;
+  --text-main: #14171f;
+  --text-muted: #717784;
+  --accent-orange: #e26a45;
+  --accent-green: #d6e2cc;
+  --border-soft: #e7e2d7;
+}
+
+body {
+  background-color: #f7f5ef;
+  color: #14171f;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography Effects ─────────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-syne), var(--font-sans), system-ui, sans-serif;
+}
+
+.text-stroke-custom {
+  color: transparent !important;
+  -webkit-text-stroke: 1.5px #14171f;
+}
+
+@media (min-width: 768px) {
+  .text-stroke-custom {
+    -webkit-text-stroke: 2.2px #14171f;
+  }
+}
+
+.text-stencil-cut {
+  position: relative;
+  display: inline-block;
+  color: #14171f;
+  background: repeating-linear-gradient(
+    to bottom,
+    #14171f 0px,
+    #14171f 8px,
+    #fbf9f5 8px,
+    #fbf9f5 12px
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Frosted Glass Overlay Stripes ───────────────────────────────────────── */
+.glass-stripe {
+  background: rgba(245, 240, 230, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ── Interactive Elements ────────────────────────────────────────────────── */
+.btn-arrow-hover:hover .arrow-icon {
+  transform: translate(2px, -2px) rotate(45deg);
+}
+
+.card-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -10px rgba(20, 23, 31, 0.08);
+}

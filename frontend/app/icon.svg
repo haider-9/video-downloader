@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <rect width="100" height="100" rx="22" fill="#14171f"/>
+  {/* Geometric Chevron 7 with Video Play / Arrow Accent */}
+  <path d="M22 24 L78 24 L52 76 L38 76 L60 34 L22 34 Z" fill="#f8f6f0"/>
+  <polygon points="62,24 78,24 66,40" fill="#e26a45"/>
+  <polygon points="38,48 54,58 38,68" fill="#e26a45"/>
+</svg>
