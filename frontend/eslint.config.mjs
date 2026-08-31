@@ -13,6 +13,21 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    // Animate UI is a copy-paste component library whose source intentionally
+    // uses patterns the default Next.js react-hooks rules reject. These files
+    // are vendored as-is and are not written by us, so skip those rules here.
+    files: [
+      "components/animate-ui/**/*.{ts,tsx}",
+      "hooks/use-is-in-view.{ts,tsx}",
+      "lib/get-strict-context.{ts,tsx}",
+    ],
+    rules: {
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/refs": "off",
+      "react-hooks/static-components": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

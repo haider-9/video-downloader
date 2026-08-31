@@ -2,6 +2,28 @@
 @import "tw-animate-css";
 
 @theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-surface-muted: var(--surface-muted);
+  --color-gradient-brand: var(--gradient-brand);
+
   --font-sans: var(--font-sans), system-ui, sans-serif;
   --font-syne: var(--font-syne), var(--font-sans), system-ui, sans-serif;
 }
@@ -14,6 +36,35 @@
   --accent-orange: #e26a45;
   --accent-green: #d6e2cc;
   --border-soft: #e7e2d7;
+
+  /* shadcn theme tokens (harmonized with VidGet palette) */
+  --background: #f7f5ef;
+  --foreground: #14171f;
+  --card: #ffffff;
+  --card-foreground: #14171f;
+  --popover: #ffffff;
+  --popover-foreground: #14171f;
+  --primary: #14171f;
+  --primary-foreground: #ffffff;
+  --secondary: #ddd6c8;
+  --secondary-foreground: #14171f;
+  --muted: #f0ebe1;
+  --muted-foreground: #716a5f;
+  --accent: #fdeee7;
+  --accent-foreground: #b54b2a;
+  --destructive: #c0392b;
+  --border: #e4ded2;
+  --input: #ded7ca;
+  --ring: #14171f;
+  --success: #27c93f;
+  --surface-muted: #f4f1ea;
+  --gradient-brand: linear-gradient(135deg, #e26a45, #d65e3a);
+}
+
+@theme inline {
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-sm: 0.375rem;
 }
 
 body {
@@ -22,6 +73,36 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent iOS zoom-on-focus for the URL field */
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Fluid hero headline so it scales gracefully between phone and desktop.
+   Relative to viewport width; the hero column is narrower than the viewport,
+   so also cap generously and allow the row to wrap when tight. */
+.hero-headline {
+  font-size: clamp(2.5rem, 11vw, 4.5rem);
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+  .hero-headline {
+    font-size: clamp(3.5rem, 8vw, 5.5rem);
+  }
 }
 
 /* ── Typography Effects ─────────────────────────────────────────────────── */

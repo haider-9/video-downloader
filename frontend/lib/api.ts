@@ -72,6 +72,93 @@ export interface DownloadOptions {
   signal?: AbortSignal;
 }
 
+export interface PreviewFile {
+  blob: Blob;
+  filename: string;
+  contentType: string;
+  url: string; // object URL for playback — caller is responsible for revoking
+}
+
+/**
+ * Fetches a format from /api/download and returns it as a Blob WITHOUT
+ * triggering an automatic file save. The returned object URL can be used for
+ * in-page playback.
+ *
+ * Returns { success: true, data: PreviewFile } on success, or an ApiError.
+ */
+export async function previewFormat(
+  opts: DownloadOptions
+): Promise<{ success: true; data: PreviewFile } | ApiError> {
+  const { url, format_id, audio_format_id, audio_language, onProgress, signal } = opts;
+
+  try {
+    const res = await fetch(`${apiBase()}/api/download`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url, format_id, audio_format_id, audio_language }),
+      signal,
+    });
+
+    if (!res.ok) {
+      const json = await res.json().catch(() => null);
+      const detail = json?.detail;
+      const msg =
+        (typeof detail === "object" ? detail?.error : detail) ??
+        json?.error ??
+        "The video failed to load for playback. Please try again.";
+      return apiError(msg, "DOWNLOAD_FAILED");
+    }
+
+    // Stream the response body and track progress
+    const contentLength = res.headers.get("Content-Length");
+    const total = contentLength ? parseInt(contentLength, 10) : 0;
+    const reader = res.body?.getReader();
+
+    if (!reader) {
+      return apiError("No response body received from server.", "NO_BODY");
+    }
+
+    const chunks: ArrayBuffer[] = [];
+    let received = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) {
+        // Copy into a plain ArrayBuffer so Blob accepts it regardless of
+        // whether the underlying buffer is a SharedArrayBuffer.
+        const buf = value.buffer.slice(
+          value.byteOffset,
+          value.byteOffset + value.byteLength
+        ) as ArrayBuffer;
+        chunks.push(buf);
+        received += value.byteLength;
+        if (total > 0 && onProgress) {
+          onProgress(Math.min(99, Math.round((received / total) * 100)));
+        } else if (onProgress) {
+          onProgress(-1); // indeterminate
+        }
+      }
+    }
+
+    const blob = new Blob(chunks);
+    const disposition = res.headers.get("Content-Disposition") ?? "";
+    const filenameMatch = disposition.match(/filename="?([^";\n]+)"?/i);
+    const filename = filenameMatch?.[1]?.trim() ?? "video";
+    const contentType = res.headers.get("Content-Type") ?? blob.type ?? "video/mp4";
+
+    const urlObj = URL.createObjectURL(blob);
+    onProgress?.(100);
+
+    return { success: true, data: { blob, filename, contentType, url: urlObj } };
+  } catch (err: unknown) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      return apiError("Playback load was cancelled.", "ABORTED");
+    }
+    return networkError();
+  }
+}
+
 /**
  * Initiates a download by POSTing to /api/download and triggering a browser
  * file-save via a temporary object URL.

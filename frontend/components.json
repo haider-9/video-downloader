@@ -19,6 +19,7 @@
     "hooks": "@/hooks"
   },
   "registries": {
+    "@animate-ui": "https://animate-ui.com/r/{name}.json",
     "@magicui": "https://magicui.design/r/{name}.json",
     "@aceternity": "https://ui.aceternity.com/registry/{name}.json",
     "@react-bits": "https://reactbits.dev/r/{name}.json"
