@@ -58,6 +58,20 @@ def build_common_opts(extra: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     if clients:
         opts["player_client"] = [c.strip() for c in clients.split(",") if c.strip()]
 
+    # po_token (Proof of Origin) — required for server IPs on recent YouTube.
+    # Set PO_TOKEN env var as "CLIENT+TOKEN" pairs, comma-separated.
+    # e.g. "web+TOKEN1,web_safari+TOKEN2"
+    # Generate tokens with: https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide
+    po_token = config.YTDLP_PO_TOKEN
+    if po_token:
+        opts["po_token"] = [t.strip() for t in po_token.split(",") if t.strip()]
+
+    # visitor_data — paired with po_token for the web client.
+    visitor_data = config.YTDLP_VISITOR_DATA
+    if visitor_data:
+        opts["extractor_args"] = opts.get("extractor_args") or {}
+        opts["extractor_args"].setdefault("youtube", {})["visitor_data"] = [visitor_data]
+
     # Impersonate a real browser TLS fingerprint via curl_cffi (if installed).
     if config.YTDLP_IMPERSONATE:
         try:

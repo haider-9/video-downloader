@@ -44,6 +44,16 @@ YTDLP_USER_AGENT = os.getenv("YTDLP_USER_AGENT", "")
 # "android,ios,web_safari" (browser-like clients often dodge bot detection).
 YTDLP_PLAYER_CLIENTS = os.getenv("YTDLP_PLAYER_CLIENTS", "")
 
+# po_token (Proof of Origin token) for bypassing YouTube bot detection on
+# server IPs. Format: "CLIENT+TOKEN" pairs, comma-separated.
+# e.g. "web+TOKEN,web_safari+TOKEN2"
+# Generate with: https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide
+# or use: https://github.com/iv-org/youtube-po-token-generator
+YTDLP_PO_TOKEN = os.getenv("YTDLP_PO_TOKEN", "")
+
+# visitor_data — paired with po_token. Extract from browser or use generator.
+YTDLP_VISITOR_DATA = os.getenv("YTDLP_VISITOR_DATA", "")
+
 # Browser impersonation target for curl_cffi, e.g. "chrome" or "safari".
 # Requires the `curl_cffi` python package. Empty = disabled.
 YTDLP_IMPERSONATE = os.getenv("YTDLP_IMPERSONATE", "")
