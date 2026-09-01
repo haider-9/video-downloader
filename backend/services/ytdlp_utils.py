@@ -62,11 +62,17 @@ def build_common_opts(extra: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     if config.YTDLP_IMPERSONATE:
         try:
             import curl_cffi  # noqa: F401
-            opts["impersonate"] = config.YTDLP_IMPERSONATE
+            from yt_dlp.networking.impersonate import ImpersonateTarget
+            opts["impersonate"] = ImpersonateTarget.from_str(config.YTDLP_IMPERSONATE)
         except ImportError:
             logger.warning(
                 "YTDLP_IMPERSONATE is set but curl_cffi is not installed; "
                 "impersonation disabled."
+            )
+        except Exception:
+            logger.warning(
+                "YTDLP_IMPERSONATE value %r is invalid; impersonation disabled.",
+                config.YTDLP_IMPERSONATE,
             )
 
     # Optional cookie file (e.g. from a logged-in browser) for stubborn cases.
