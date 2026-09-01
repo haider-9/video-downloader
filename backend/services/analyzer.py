@@ -88,6 +88,7 @@ _ERROR_MAP: list[tuple[str, str]] = [
     ("HTTP Error 429", "Too many requests. Please wait a moment and try again."),
     ("network", "A network error occurred. Please check your connection and try again."),
     ("timed out", "The request timed out. Please try again."),
+    ("exceeds maximum allowed duration", "This video is longer than the allowed limit. Please choose a shorter video."),
 ]
 
 
@@ -606,6 +607,12 @@ def _fetch_info(url: str) -> VideoInfo:
             duration = int(duration)
         except (TypeError, ValueError):
             duration = None
+
+    if duration and duration > config.MAX_DURATION_SECONDS:
+        raise ValueError(
+            "This video is longer than the allowed limit. "
+            "Please choose a shorter video."
+        )
 
     thumbnail = info.get("thumbnail")
     if not thumbnail:

@@ -19,18 +19,18 @@ ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS", "http://localhost:3000"
 ).split(",")
 
-# --- Download limits ---
-MAX_FILE_SIZE_MB = int(os.getenv("MAX_FILE_SIZE_MB", "2048"))  # 2 GB default
-MAX_DURATION_SECONDS = int(os.getenv("MAX_DURATION_SECONDS", "7200"))  # 2 h
-DOWNLOAD_TIMEOUT_SECONDS = int(os.getenv("DOWNLOAD_TIMEOUT_SECONDS", "3600"))
+# --- Download limits (conservative defaults for free-tier hosting) ---
+MAX_FILE_SIZE_MB = int(os.getenv("MAX_FILE_SIZE_MB", "100"))  # 100 MB
+MAX_DURATION_SECONDS = int(os.getenv("MAX_DURATION_SECONDS", "600"))  # 10 min
+DOWNLOAD_TIMEOUT_SECONDS = int(os.getenv("DOWNLOAD_TIMEOUT_SECONDS", "120"))
 ANALYZE_TIMEOUT_SECONDS = int(os.getenv("ANALYZE_TIMEOUT_SECONDS", "30"))
 
 # --- Concurrency ---
-MAX_CONCURRENT_DOWNLOADS = int(os.getenv("MAX_CONCURRENT_DOWNLOADS", "3"))
+MAX_CONCURRENT_DOWNLOADS = int(os.getenv("MAX_CONCURRENT_DOWNLOADS", "1"))
 
 # --- Cleanup ---
 # Files older than this many seconds will be purged
-FILE_TTL_SECONDS = int(os.getenv("FILE_TTL_SECONDS", "900"))  # 15 min
+FILE_TTL_SECONDS = int(os.getenv("FILE_TTL_SECONDS", "300"))  # 5 min
 
 # --- yt-dlp / ffmpeg ---
 FFMPEG_LOCATION = os.getenv("FFMPEG_LOCATION", "")  # empty = use PATH

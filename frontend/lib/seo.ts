@@ -1,7 +1,9 @@
 // Centralised SEO constants + structured data (JSON-LD) for VidGet.
-// Update SITE_URL to the production domain when deploying.
+// Set NEXT_PUBLIC_SITE_URL to the production domain when deploying, or
+// SITE_URL defaults to the Render deployment URL.
 
-export const SITE_URL = "https://vidget.app";
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://vidget-frontend.onrender.com";
 
 export const SITE_NAME = "VidGet";
 export const SITE_TAGLINE = "Free online video downloader — 4K, 1080p & MP3";
@@ -33,7 +35,7 @@ export const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Is there a file size limit?",
-    a: "By default the server caps downloads at 2 GB. For most videos this is more than enough — a two-hour 1080p video is typically 2–4 GB, so very long high-resolution videos may need a lower quality setting.",
+    a: "By default the server caps downloads at 100 MB and videos at 10 minutes of duration to keep the service fast and available. For longer videos, there may be a lower quality setting.",
   },
 ];
 

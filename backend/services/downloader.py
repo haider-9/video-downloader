@@ -138,6 +138,10 @@ async def download_video(
         "merge_output_format": "mp4",
         "progress_hooks": [tracker.hook],
         "noplaylist": True,
+        # Reject videos longer than the configured limit before downloading
+        "match_filter": lambda d: None
+        if not (d.get("duration") or 0) or d["duration"] <= config.MAX_DURATION_SECONDS
+        else "Video exceeds maximum allowed duration",
         # Security: restrict filenames
         "restrictfilenames": True,
         "windowsfilenames": True,
