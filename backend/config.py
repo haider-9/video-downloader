@@ -1,5 +1,6 @@
 """Application configuration loaded from environment variables."""
 
+import base64
 import os
 from pathlib import Path
 
@@ -49,7 +50,19 @@ YTDLP_IMPERSONATE = os.getenv("YTDLP_IMPERSONATE", "")
 
 # Path to a Netscape-format cookies file exported from a browser.
 # Only needed for videos that still require a login after the above measures.
+# On Render (no persistent disk), set COOKIES_B64 to the base64-encoded
+# contents of cookies.txt — it will be decoded into a temp file automatically.
 COOKIES_FILE = os.getenv("COOKIES_FILE", "")
+
+_COOKIES_B64 = os.getenv("COOKIES_B64", "")
+if _COOKIES_B64 and not COOKIES_FILE:
+    _cookies_path = TEMP_DIR / "cookies.txt"
+    try:
+        _cookies_path.write_bytes(base64.b64decode(_COOKIES_B64))
+        COOKIES_FILE = str(_cookies_path)
+    except Exception as _e:
+        import logging as _logging
+        _logging.getLogger(__name__).warning("Failed to decode COOKIES_B64: %s", _e)
 
 # --- Rate limiting (simple in-memory) ---
 RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "20"))
