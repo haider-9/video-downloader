@@ -2,6 +2,7 @@ fastapi==0.141.1
 uvicorn==0.52.3
 starlette==1.6.0
 yt-dlp==2026.8.19
+curl_cffi==0.16.2
 pydantic==2.13.4
 pydantic-settings==2.15.0
 python-dotenv==1.2.3

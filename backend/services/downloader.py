@@ -22,6 +22,7 @@ from fastapi.responses import StreamingResponse
 
 import config
 from services.analyzer import _user_friendly_error, _validate_url_safety
+from services.ytdlp_utils import build_common_opts
 
 logger = logging.getLogger(__name__)
 
@@ -129,26 +130,22 @@ async def download_video(
 
     tracker = _ProgressTracker()
 
-    ydl_opts: dict[str, Any] = {
-        "quiet": True,
-        "no_warnings": True,
-        "no_color": True,
-        "outtmpl": output_template,
-        "format": fmt_selector,
-        "merge_output_format": "mp4",
-        "progress_hooks": [tracker.hook],
-        "noplaylist": True,
-        # Reject videos longer than the configured limit before downloading
-        "match_filter": lambda d: None
-        if not (d.get("duration") or 0) or d["duration"] <= config.MAX_DURATION_SECONDS
-        else "Video exceeds maximum allowed duration",
-        # Security: restrict filenames
-        "restrictfilenames": True,
-        "windowsfilenames": True,
-    }
-
-    if config.FFMPEG_LOCATION:
-        ydl_opts["ffmpeg_location"] = config.FFMPEG_LOCATION
+    ydl_opts = build_common_opts(
+        {
+            "outtmpl": output_template,
+            "format": fmt_selector,
+            "merge_output_format": "mp4",
+            "progress_hooks": [tracker.hook],
+            "noplaylist": True,
+            # Reject videos longer than the configured limit before downloading
+            "match_filter": lambda d: None
+            if not (d.get("duration") or 0) or d["duration"] <= config.MAX_DURATION_SECONDS
+            else "Video exceeds maximum allowed duration",
+            # Security: restrict filenames
+            "restrictfilenames": True,
+            "windowsfilenames": True,
+        }
+    )
 
     loop = asyncio.get_event_loop()
     try:

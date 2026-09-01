@@ -17,6 +17,7 @@ import yt_dlp
 
 import config
 from models import AudioLanguage, FormatInfo, VideoInfo
+from services.ytdlp_utils import build_common_opts
 
 logger = logging.getLogger(__name__)
 
@@ -552,19 +553,15 @@ async def analyze_url(url: str) -> VideoInfo:
 
 def _fetch_info(url: str) -> VideoInfo:
     """Synchronous yt-dlp call (run in executor)."""
-    ydl_opts: dict[str, Any] = {
-        "quiet": True,
-        "no_warnings": True,
-        "skip_download": True,
-        "no_color": True,
-        "ignoreerrors": False,
-        # Don't write anything to disk during analysis
-        "writeinfojson": False,
-        "writethumbnail": False,
-    }
-
-    if config.FFMPEG_LOCATION:
-        ydl_opts["ffmpeg_location"] = config.FFMPEG_LOCATION
+    ydl_opts = build_common_opts(
+        {
+            "skip_download": True,
+            "ignoreerrors": False,
+            # Don't write anything to disk during analysis
+            "writeinfojson": False,
+            "writethumbnail": False,
+        }
+    )
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

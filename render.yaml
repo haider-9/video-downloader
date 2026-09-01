@@ -21,3 +21,10 @@ services:
         value: 1
       - key: FILE_TTL_SECONDS
         value: 300
+      # ── yt-dlp anti-bot (YouTube) ──────────────────────────────────────────
+      # Rotate through browser-like player clients to dodge bot detection.
+      - key: YTDLP_PLAYER_CLIENTS
+        value: android,ios,web_safari
+      # Impersonate a real browser TLS fingerprint via curl_cffi.
+      - key: YTDLP_IMPERSONATE
+        value: chrome
