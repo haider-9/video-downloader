@@ -33,7 +33,6 @@ import { Play as AnimatedPlay } from "@/components/animate-ui/icons/play";
 import { Download as AnimatedDownload } from "@/components/animate-ui/icons/download";
 
 const PLATFORM_TAGS = [
-  { id: "youtube", label: "#youtube", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
   { id: "tiktok", label: "#tiktok", url: "https://www.tiktok.com/@sample/video/123456789" },
   { id: "instagram", label: "#instagram", url: "https://www.instagram.com/reel/C123456789/" },
   { id: "vimeo", label: "#vimeo", url: "https://vimeo.com/76979871" },
@@ -63,7 +62,7 @@ const FEATURES = [
   {
     icon: Globe,
     title: "Hundreds of sources",
-    description: "Powered by yt-dlp — supports YouTube, Vimeo, TikTok, Twitter/X, Dailymotion, Reddit, and thousands of other sites.",
+    description: "Powered by yt-dlp — supports Vimeo, TikTok, Twitter/X, Dailymotion, Reddit, SoundCloud, and thousands of other sites. YouTube is not supported.",
   },
   {
     icon: ShieldCheck,
@@ -78,7 +77,7 @@ const STEPS = [
     step: "01",
     title: "Paste your URL",
     description:
-      "Copy the link from any supported video platform and paste it into the input. Works with YouTube, Vimeo, TikTok, Twitter, and hundreds more.",
+      "Copy the link from any supported video platform and paste it into the input. Works with Vimeo, TikTok, Twitter, and hundreds more.",
   },
   {
     icon: ListChecks,
@@ -185,12 +184,6 @@ export default function HomePage() {
   const handlePreview = useCallback(
     async (format: FormatInfo) => {
       if (!currentVideo) return;
-      if (currentVideo.platform === "YouTube") {
-        setPreviewError(
-          "YouTube streams are DRM-protected and can't be played directly in the browser. Use Download instead."
-        );
-        return;
-      }
       setPreviewLoading(true);
       setPreviewError(null);
       setPreviewProgress(-1);
@@ -486,11 +479,15 @@ export default function HomePage() {
                         </div>
                       </div>
                       <p className="mt-5 text-base sm:text-lg text-[#716a5f] max-w-md leading-relaxed">
-                        Paste a link from YouTube, TikTok, Instagram, Twitter/X, Vimeo and
+                        Paste a link from TikTok, Instagram, Twitter/X, Vimeo and
                         1000+ more. Download in pristine <strong className="font-semibold text-[#14171f]">4K</strong>,{" "}
                         <strong className="font-semibold text-[#14171f]">1080p</strong>, or{" "}
                         <strong className="font-semibold text-[#14171f]">MP3</strong> with
                         multi-language audio tracks.
+                      </p>
+                      <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[#c0392b]">
+                        <ShieldCheck className="size-3.5" />
+                        YouTube is not supported — YouTube blocks downloads from server backends.
                       </p>
                     </div>
                   </Slide>
@@ -514,7 +511,7 @@ export default function HomePage() {
                             setUrlInput(e.target.value);
                             if (analyzeError) setAnalyzeError("");
                           }}
-                          placeholder="Paste video link — YouTube, TikTok, Instagram, Twitter, Vimeo..."
+                          placeholder="Paste video link — TikTok, Instagram, Twitter, Vimeo..."
                           className="w-full bg-transparent border-0 pl-3 pr-8 py-2 sm:py-3 text-sm sm:text-base text-[#14171f] placeholder:text-[#8c8477] focus:outline-none"
                           aria-label="Video URL"
                         />
@@ -622,49 +619,36 @@ export default function HomePage() {
                               <span>{currentVideo.formats && currentVideo.formats[0] ? currentVideo.formats[0].quality_label : "HD"}</span>
                             </div>
 
-                            {/* Center: pulsing play button (hidden for DRM platforms like YouTube) */}
-                            {currentVideo.platform !== "YouTube" ? (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="relative flex items-center justify-center">
-                                  <span
-                                    className="absolute inset-0 rounded-full bg-white/25 animate-ping opacity-70 group-hover/player:opacity-100 transition-opacity"
-                                    aria-hidden="true"
-                                  />
-                                  <button
-                                    type="button"
-                                    aria-label="Play video preview"
-                                    onClick={() =>
-                                      handlePreview(
-                                        currentVideo.formats.find((f) => f.is_default) ??
-                                          currentVideo.formats.find((f) => f.has_video) ??
-                                          currentVideo.formats[0]
-                                      )
-                                    }
-                                    className="relative flex size-12 sm:size-14 items-center justify-center rounded-full bg-white/15 backdrop-blur-md border border-white/40 text-white shadow-xl transition-all duration-200 hover:bg-[#e26a45] hover:scale-105 cursor-pointer"
-                                  >
-                                    <AnimatedPlay size={22} className="ml-0.5" animateOnHover completeOnStop />
-                                  </button>
-                                </div>
+                            {/* Center: pulsing play button */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="relative flex items-center justify-center">
+                                <span
+                                  className="absolute inset-0 rounded-full bg-white/25 animate-ping opacity-70 group-hover/player:opacity-100 transition-opacity"
+                                  aria-hidden="true"
+                                />
+                                <button
+                                  type="button"
+                                  aria-label="Play video preview"
+                                  onClick={() =>
+                                    handlePreview(
+                                      currentVideo.formats.find((f) => f.is_default) ??
+                                        currentVideo.formats.find((f) => f.has_video) ??
+                                        currentVideo.formats[0]
+                                    )
+                                  }
+                                  className="relative flex size-12 sm:size-14 items-center justify-center rounded-full bg-white/15 backdrop-blur-md border border-white/40 text-white shadow-xl transition-all duration-200 hover:bg-[#e26a45] hover:scale-105 cursor-pointer"
+                                >
+                                  <AnimatedPlay size={22} className="ml-0.5" animateOnHover completeOnStop />
+                                </button>
                               </div>
-                            ) : (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="flex items-center gap-2 rounded-full bg-black/55 backdrop-blur-md border border-white/10 px-4 py-2">
-                                  <AnimatedDownload size={16} className="text-[#e26a45]" animateOnHover />
-                                  <span className="text-[11px] font-bold text-white">
-                                    Streaming unavailable — Download instead
-                                  </span>
-                                </div>
-                              </div>
-                            )}
+                            </div>
 
                             {/* Hint */}
-                            {currentVideo.platform !== "YouTube" && (
-                              <div className="absolute inset-x-0 bottom-0 px-3.5 pb-3">
-                                <p className="text-center text-[10px] font-medium text-white/70">
-                                  Play downloads the file first, then plays it in-browser
-                                </p>
-                              </div>
-                            )}
+                            <div className="absolute inset-x-0 bottom-0 px-3.5 pb-3">
+                              <p className="text-center text-[10px] font-medium text-white/70">
+                                Play downloads the file first, then plays it in-browser
+                              </p>
+                            </div>
                           </>
                         )}
 
@@ -776,8 +760,7 @@ export default function HomePage() {
                                 key={fmt.format_id}
                                 className="inline-flex items-center gap-1.5 rounded-full border border-[#ded7ca] bg-white px-2.5 py-1 shadow-sm"
                               >
-                                {currentVideo.platform !== "YouTube" ? (
-                                  <button
+                                <button
                                     type="button"
                                     onClick={() => handlePreview(fmt)}
                                     disabled={previewLoading}
@@ -788,11 +771,6 @@ export default function HomePage() {
                                     <Play className="size-3 fill-current" />
                                     {qualityBadge(fmt)}
                                   </button>
-                                ) : (
-                                  <span className="flex items-center gap-1 text-xs font-bold text-[#14171f]">
-                                    {qualityBadge(fmt)}
-                                  </span>
-                                )}
                                 <button
                                   type="button"
                                   onClick={(e) => {

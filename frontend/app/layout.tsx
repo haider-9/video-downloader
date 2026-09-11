@@ -25,10 +25,9 @@ export const metadata: Metadata = {
     template: "%s | VidGet — Video Downloader",
   },
   description:
-    "Free online video downloader. Paste any URL and download in 4K, 1080p, 720p, or MP3 with multi-language audio tracks. Works with YouTube, TikTok, Instagram, Twitter/X, Vimeo, and 1000+ sites. No account needed.",
+    "Free online video downloader. Paste any URL and download in 4K, 1080p, 720p, or MP3 with multi-language audio tracks. Works with TikTok, Instagram, Twitter/X, Vimeo, and 1000+ sites. No account needed. YouTube is not supported.",
   keywords: [
     "video downloader",
-    "youtube downloader",
     "tiktok downloader",
     "instagram video downloader",
     "twitter video downloader",
@@ -66,14 +65,14 @@ export const metadata: Metadata = {
     siteName: "VidGet",
     title: "VidGet — Unlock Any Video | 4K Video & MP3 Downloader",
     description:
-      "Paste any video URL and download in pristine 4K, 1080p, or MP3 with multi-language audio tracks. Works with YouTube, TikTok, Instagram, Twitter/X, and 1000+ sites.",
+      "Paste any video URL and download in pristine 4K, 1080p, or MP3 with multi-language audio tracks. Works with TikTok, Instagram, Twitter/X, and 1000+ sites. YouTube is not supported.",
     locale: "en_US",
     images: [
       {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "VidGet — free online video downloader for YouTube, TikTok, Instagram and more",
+        alt: "VidGet — free online video downloader for TikTok, Instagram and more",
       },
     ],
   },

@@ -58,6 +58,31 @@ def _validate_url_safety(url: str) -> None:
         raise ValueError("This URL is not supported.")
 
 
+# Platforms that VidGet intentionally does not support. YouTube does not allow
+# downloads from server backends (e.g. the Render-hosted API), so any YouTube
+# URL is rejected up front with a clear message instead of a confusing failure.
+_UNSUPPORTED_PLATFORMS = {
+    "youtube.com": "YouTube",
+    "youtu.be": "YouTube",
+}
+
+
+def _validate_platform_supported(url: str) -> None:
+    """Raise ValueError with a clear message for unsupported platforms."""
+    try:
+        host = urlparse(url).hostname or ""
+        host = host.lower().replace("www.", "")
+    except Exception:
+        return
+    for domain, name in _UNSUPPORTED_PLATFORMS.items():
+        if host == domain or host.endswith("." + domain):
+            raise ValueError(
+                f"{name} is not supported by VidGet — {name} does not allow "
+                f"downloads from server backends like this one, so it is not "
+                f"possible to download or stream {name} videos here."
+            )
+
+
 # ---------------------------------------------------------------------------
 # Error translation
 # ---------------------------------------------------------------------------
@@ -157,8 +182,6 @@ def _platform_from_url(url: str) -> str:
         host = urlparse(url).hostname or ""
         host = host.lower().replace("www.", "")
         _KNOWN = {
-            "youtube.com": "YouTube",
-            "youtu.be": "YouTube",
             "vimeo.com": "Vimeo",
             "dailymotion.com": "Dailymotion",
             "twitch.tv": "Twitch",
@@ -538,6 +561,7 @@ async def analyze_url(url: str) -> VideoInfo:
     Raises ValueError with a user-friendly message on known errors.
     """
     _validate_url_safety(url)
+    _validate_platform_supported(url)
 
     loop = asyncio.get_event_loop()
     try:

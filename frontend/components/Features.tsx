@@ -38,7 +38,7 @@ const FEATURES = [
   {
     icon: Globe,
     title: "Hundreds of sources",
-    description: "Powered by yt-dlp — supports YouTube, Vimeo, TikTok, Twitter/X, Dailymotion, Reddit, and thousands of other sites.",
+    description: "Powered by yt-dlp — supports Vimeo, TikTok, Twitter/X, Dailymotion, Reddit, SoundCloud, and thousands of other sites. YouTube is not supported.",
   },
   {
     icon: ShieldCheck,

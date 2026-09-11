@@ -13,7 +13,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What URLs are supported?",
-    a: "Any publicly accessible URL that yt-dlp supports — including YouTube, Vimeo, TikTok, Twitter/X, Dailymotion, Reddit, Twitch clips, SoundCloud, and thousands more. If the video plays in a browser without a login, it will usually work.",
+    a: "Any publicly accessible URL that yt-dlp supports — including Vimeo, TikTok, Twitter/X, Dailymotion, Reddit, Twitch clips, SoundCloud, and thousands more. YouTube is not supported. If the video plays in a browser without a login, it will usually work.",
   },
   {
     q: "Can I download audio only?",
@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Why does some videos take longer to process?",
-    a: "When the best-quality stream is video-only (as is common on YouTube), we need to download a separate audio track and combine them using FFmpeg. Longer or higher-resolution videos take more time to fetch and merge.",
+    a: "When the best-quality stream is video-only (as is common on many platforms), we need to download a separate audio track and combine them using FFmpeg. Longer or higher-resolution videos take more time to fetch and merge.",
   },
   {
     q: "Where is the file saved after downloading?",

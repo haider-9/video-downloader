@@ -82,7 +82,7 @@ export default function UrlInput({ onAnalyze, isLoading }: UrlInputProps) {
             value={value}
             onChange={handleChange}
             disabled={isLoading}
-            placeholder="Paste a video URL — YouTube, Vimeo, TikTok, and more…"
+            placeholder="Paste a video URL — Vimeo, TikTok, Instagram, Twitter, and more…"
             aria-describedby={error ? errorId : undefined}
             aria-invalid={!!error}
             className="h-12 rounded-xl border-0 bg-transparent pl-10 pr-10 text-sm shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 sm:h-12"
@@ -139,7 +139,7 @@ export default function UrlInput({ onAnalyze, isLoading }: UrlInputProps) {
       <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
         <ShieldCheck className="size-3.5" />
         Only download content you own or have permission to download. Supports
-        publicly accessible videos only.
+        publicly accessible videos only. <strong>YouTube is not supported.</strong>
       </p>
     </form>
   );

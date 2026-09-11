@@ -14,7 +14,7 @@ const STEPS = [
     step: "01",
     title: "Paste your URL",
     description:
-      "Copy the link from any supported video platform and paste it into the input. Works with YouTube, Vimeo, TikTok, Twitter, and hundreds more.",
+      "Copy the link from any supported video platform and paste it into the input. Works with Vimeo, TikTok, Twitter, and hundreds more.",
   },
   {
     icon: ListChecks,

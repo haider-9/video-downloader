@@ -1,14 +1,12 @@
 """
 Shared yt-dlp options and helpers for both analysis and download.
 
-Centralises anti-bot / anti-DRM measure so YouTube's bot detection (which
-blocks cloud/server IPs with "Sign in to confirm you're not a bot") can be
-mitigated in one place:
+YouTube is intentionally not supported by VidGet (YouTube blocks downloads
+from server backends), so no YouTube-specific handling lives here. These
+settings help with the other supported platforms:
 
 - A realistic browser User-Agent so the HTTP request looks like a normal
   client.
-- Client rotation across multiple YouTube player clients (which often
-  bypass the bot check on cloud IPs).
 - Optional impersonation via curl_cffi (browser-grade TLS fingerprint) when
   the extra is installed.
 - Support for a cookie file supplied by the operator for stubborn cases.
@@ -49,28 +47,6 @@ def build_common_opts(extra: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         "no_color": True,
         "user_agent": resolve_ua(),
     }
-
-    # Browser identity spoofing via the legacy top-level "player_client" option,
-    # which selects which YouTube client yt-dlp impersonates. Browser-like
-    # clients (android, ios, web_safari) often bypass YouTube's bot check that
-    # blocks cloud/server IPs.
-    clients = config.YTDLP_PLAYER_CLIENTS
-    if clients:
-        opts["player_client"] = [c.strip() for c in clients.split(",") if c.strip()]
-
-    # po_token (Proof of Origin) — required for server IPs on recent YouTube.
-    # Set PO_TOKEN env var as "CLIENT+TOKEN" pairs, comma-separated.
-    # e.g. "web+TOKEN1,web_safari+TOKEN2"
-    # Generate tokens with: https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide
-    po_token = config.YTDLP_PO_TOKEN
-    if po_token:
-        opts["po_token"] = [t.strip() for t in po_token.split(",") if t.strip()]
-
-    # visitor_data — paired with po_token for the web client.
-    visitor_data = config.YTDLP_VISITOR_DATA
-    if visitor_data:
-        opts["extractor_args"] = opts.get("extractor_args") or {}
-        opts["extractor_args"].setdefault("youtube", {})["visitor_data"] = [visitor_data]
 
     # Impersonate a real browser TLS fingerprint via curl_cffi (if installed).
     if config.YTDLP_IMPERSONATE:

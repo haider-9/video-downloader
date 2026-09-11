@@ -21,7 +21,11 @@ import yt_dlp
 from fastapi.responses import StreamingResponse
 
 import config
-from services.analyzer import _user_friendly_error, _validate_url_safety
+from services.analyzer import (
+    _user_friendly_error,
+    _validate_platform_supported,
+    _validate_url_safety,
+)
 from services.ytdlp_utils import build_common_opts
 
 logger = logging.getLogger(__name__)
@@ -106,6 +110,7 @@ async def download_video(
     Raises ValueError with a user-friendly message on known errors.
     """
     _validate_url_safety(url)
+    _validate_platform_supported(url)
 
     job_id = uuid.uuid4().hex
     output_dir = config.TEMP_DIR
